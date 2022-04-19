@@ -91,9 +91,9 @@
         NSLog(@"[Error] Google Login ClientID is null. please ClientID.");
         return NO;
     }
-    // TODO(Tyler): See if this needs to be updated to use a
-    // `GIDConfiguration` object
-    GIDSignIn.sharedInstance.clientID = GOOGLE_LOGIN_CLIENT_ID;
+    // TODO(Tyler): See how to properly use GIDConfiguration here.
+    signInConfig = [[GIDConfiguration alloc] initWithClientID:GOOGLE_LOGIN_CLIENT_ID];
+    GIDSignIn.sharedInstance.GIDConfiguration = signInConfig;
 
     if([self isNeedLogin]){
         [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_REQUEST

@@ -15,19 +15,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [GIDSignIn sharedInstance].delegate = self;
-    
-    [GIDSignIn sharedInstance].presentingViewController = self;
-    [[GIDSignIn sharedInstance] restorePreviousSignIn];
-    
+
+    GIDSignIn.sharedInstance.delegate = self;
+
+    GIDSignIn.sharedInstance.presentingViewController = self;
+    [GIDSignIn.sharedInstance restorePreviousSignInWithCallback:];
+
     // Uncomment to automatically sign in the user.
-    //[[GIDSignIn sharedInstance] signInSilently];
-    
+    //[GIDSignIn.sharedInstance signInSilently];
+
     _backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
     [_backgroundView setBackgroundColor:[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1]];
     [self.view addSubview:_backgroundView];
-    
+
     _googleLoginButton = [[GIDSignInButton alloc] initWithFrame:CGRectMake(0, 0, 312, 48)];
     [_googleLoginButton setTranslatesAutoresizingMaskIntoConstraints:NO];
     [_googleLoginButton setStyle:kGIDSignInButtonStyleWide];
@@ -43,9 +43,9 @@
     [self.view addSubview:_googleLoginButton];
     [self.view addConstraint:_googleLoginButtonCenterConstraint];
     [self.view addConstraint:_googleLoginButtonBottomConstraint];
-    
+
     ///////////////////////////
-    
+
     _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     [_nameLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     _nameLabel.textAlignment = NSTextAlignmentCenter;
@@ -67,7 +67,7 @@
     [self.view addSubview:_nameLabel];
     [self.view addConstraint:_nameLabelYConstraint];
     [self.view addConstraint:_nameLabelXConstraint];
-    
+
     ////////////
     _phonenumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     [_phonenumberLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -87,13 +87,13 @@
                                                                 attribute:NSLayoutAttributeCenterX
                                                                multiplier:1
                                                                  constant:0];
-    
+
     ///////////////////////////
-    
+
     [self.view addSubview:_phonenumberLabel];
     [self.view addConstraint:_phonenumberLabelYConstraint];
     [self.view addConstraint:_phonenumberLabelXConstraint];
-    
+
     ////////////////////////////
     _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     [ _emailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -116,15 +116,15 @@
     [self.view addSubview:_emailLabel];
     [self.view addConstraint:_emailLabelYConstraint];
     [self.view addConstraint:_emailLabelXConstraint];
-    
-    
+
+
     ///////////////////////////////
     _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 230, 48)];
     [_closeButton setTranslatesAutoresizingMaskIntoConstraints:NO];
     [_closeButton setTitle:@"Close" forState:UIControlStateNormal];
     [_closeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_closeButton addTarget:self action:@selector(puhsedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     _closeButtonCenterConstraint = [NSLayoutConstraint constraintWithItem:_closeButton
                                                                                    attribute:NSLayoutAttributeCenterX
                                                                                    relatedBy:NSLayoutRelationEqual
@@ -148,7 +148,7 @@
     [_messageLabel setText:@" Push 'Sign in with Google' \n to Login Your Account! "];
     [_messageLabel setTextColor:[UIColor grayColor]];
     [_messageLabel setTextAlignment:NSTextAlignmentCenter];
-    
+
     _messageLabelCenterConstraint = [NSLayoutConstraint constraintWithItem:_messageLabel
                                                                attribute:NSLayoutAttributeCenterX
                                                                relatedBy:NSLayoutRelationEqual
@@ -164,7 +164,7 @@
     [self.view addSubview:_messageLabel];
     [self.view addConstraint:_messageLabelCenterConstraint];
     [self.view addConstraint:_messageLabelYConstraint];
-    
+
     [self showUserInfo];
 }
 
@@ -180,7 +180,7 @@
     if ([GoogleLogin getEmail]!=nil) {
         _emailLabel.text = [GoogleLogin getEmail];
     }
-    
+
     if ([GoogleLogin getPhonenumber]!=nil) {
         _phonenumberLabel.text = [GoogleLogin getPhonenumber];
     }

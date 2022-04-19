@@ -91,22 +91,24 @@
         NSLog(@"[Error] Google Login ClientID is null. please ClientID.");
         return NO;
     }
-    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
-    
+    // TODO(Tyler): See if this needs to be updated to use a
+    // `GIDConfiguration` object
+    GIDSignIn.sharedInstance.clientID = GOOGLE_LOGIN_CLIENT_ID;
+
     if([self isNeedLogin]){
         [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
                                                             object:nil
                                                           userInfo:nil];
     }
-    
+
     NSString * name = [GoogleLogin getUserName];
     NSString * email = [GoogleLogin getEmail];
     if (name != nil && email != nil) {
         [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", name, email]];
     }
-    
+
     [self setSensingState:YES];
-    
+
     return YES;
 }
 
@@ -202,23 +204,23 @@
     NSString * email  = [GoogleLogin getEmail];
     NSString * phonenumber = [GoogleLogin getPhonenumber];
     // NSData * picture = [GoogleLogin getPicture];
-    
+
     bool isNameEncryption   = [defaults boolForKey:@"encryption_name_sha1"];
     bool isEmailEncryption  = [defaults boolForKey:@"encryption_email_sha1"];
     bool isPhonenumberEncryption = [defaults boolForKey:@"encryption_phonenumber_sha1"];
-    
+
     if(email != nil  && isEmailEncryption) {
         email = [AWAREUtils sha1:email];
     }
-    
+
     if(name != nil   && isNameEncryption){
         name = [AWAREUtils sha1:name];
     }
-    
+
     if(phonenumber != nil && isPhonenumberEncryption){
         phonenumber = [AWAREUtils sha1:phonenumber];
     }
-    
+
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     [dict setObject:unixtime           forKey:@"timestamp"];
@@ -234,7 +236,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_SUCCESS
                                                         object:nil
                                                       userInfo:nil];
-    
+
     return YES;
 }
 
@@ -243,7 +245,7 @@
                     withKey:(NSString * )key
 {
     if (settings == nil) return NO;
-    
+
     for (NSDictionary * setting in settings) {
         if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
             BOOL value = [[setting objectForKey:@"value"] boolValue];
